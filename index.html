@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
+
 </head>
 
 <body>
@@ -16,14 +17,16 @@
         <br>
         <label> Select Unit</label> <br>
 
-        <input type="radio" id="celcious" name="unit" checked="checked"> <label for="celcious">Celcious</label>
-        <input type="radio" id="farenhite" name="unit"> <label for="farenhite">Farenhite</label>
+        <input type="radio" id="celsius" name="unit" checked="checked"> <label for="celsius">Celsius</label>
+        <input type="radio" id="fahrenheit" name="unit"> <label for="fahrenheit">Fahrenheit</label>
         <br>
         <br>
         <input type="submit">
     </form>
 
     <h2 id="temp"></h2>
+    <img id="img">
+    <h3 id="description"></h3>
     <h3 id='max-temp'></h3>
     <h3 id='min-temp'></h3>
 
@@ -41,28 +44,44 @@
             xhr.onload = function () {
                 const weather = JSON.parse(xhr.responseText)
                 // console.log(weather.main.temp)
-                const handleFarenhite = document.getElementById('farenhite')
-                const handleCelcious = document.getElementById('celcious')
+                const handleFahrenheit = document.getElementById('fahrenheit')
+                const handleCelsius = document.getElementById('celsius')
                 const tempHandle = document.getElementById('temp')
                 const maxTempHandle = document.getElementById('max-temp')
                 const minTempHandle = document.getElementById('min-temp')
-                const kelvinToFarenhiteTemp = ((weather.main.temp - 273.15) * (9 / 5) + 32).toFixed(2)
-                const kelvinToCelciousTemp = (weather.main.temp - 273.15).toFixed(2)
-                const kelvinToFarenhiteMaxTemp = ((weather.main.temp_max - 273.15) * (9 / 5) + 32).toFixed(2)
-                const kelvinToFarenhiteMinTemp = ((weather.main.temp_min - 273.15) * (9 / 5) + 32).toFixed(2)
-                const kelvinToCelciousMaxTemp = (weather.main.temp_max - 273.15).toFixed(2)
-                const kelvinToCelciousMinTemp = (weather.main.temp_min - 273.15).toFixed(2)
+                const imgHandle = document.getElementById('img')
+                const descriptionHandle = document.getElementById('description')
+
+                //calculator
+                const kelvinToFahrenheitTemp = ((weather.main.temp - 273.15) * (9 / 5) + 32).toFixed(2)
+                const kelvinToCelsiusTemp = (weather.main.temp - 273.15).toFixed(2)
+
+                //calculator for max temp
+                const kelvinToFahrenheitMaxTemp = ((weather.main.temp_max - 273.15) * (9 / 5) + 32).toFixed(2)
+                const kelvinToCelsiusMaxTemp = (weather.main.temp_max - 273.15).toFixed(2)
+
+                //calculator for min temp
+                const kelvinToFahrenheitMinTemp = ((weather.main.temp_min - 273.15) * (9 / 5) + 32).toFixed(2)
+                const kelvinToCelsiusMinTemp = (weather.main.temp_min - 273.15).toFixed(2)
+
+                //icon
+                const imgIcon = weather.weather[0].icon
+                const imgSrc = imgHandle.src = `https://openweathermap.org/img/wn/${imgIcon}@2x.png`
+
+                // weather description
+                const weatherDescription = weather.weather[0].description
+                descriptionHandle.innerHTML = `${weatherDescription}`
 
                 // tempHandle.innerHTML = `temperature is ${weather.main.temp}`
 
-                if (handleFarenhite.checked == true) {
-                    tempHandle.innerHTML = `The current temperature of ${cityName} is ${kelvinToFarenhiteTemp}° farenhite. `
-                    maxTempHandle.innerHTML = `Maximum temperature is ${kelvinToFarenhiteMaxTemp}° farenhite.`
-                    minTempHandle.innerHTML = `Minimum temperature is ${kelvinToFarenhiteMinTemp}° farenhite.`
-                } else if (handleCelcious.checked == true) {
-                    tempHandle.innerHTML = `The current temperature of ${cityName} is  ${kelvinToCelciousTemp}° celcious`
-                    maxTempHandle.innerHTML = `Maximum temperature is ${kelvinToCelciousMaxTemp}° celcious`
-                    minTempHandle.innerHTML = `Minimum temperature is ${kelvinToCelciousMinTemp}° celcious`
+                if (handleFahrenheit.checked == true) {
+                    tempHandle.innerHTML = `The current temperature of ${cityName} is ${kelvinToFahrenheitTemp}° fahrenheit. `
+                    maxTempHandle.innerHTML = `Maximum temperature is ${kelvinToFahrenheitMaxTemp}° fahrenheit.`
+                    minTempHandle.innerHTML = `Minimum temperature is ${kelvinToFahrenheitMinTemp}° fahrenheit.`
+                } else if (handleCelsius.checked == true) {
+                    tempHandle.innerHTML = `The current temperature of ${cityName} is  ${kelvinToCelsiusTemp}° celsius`
+                    maxTempHandle.innerHTML = `Maximum temperature is ${kelvinToCelsiusMaxTemp}° celsius`
+                    minTempHandle.innerHTML = `Minimum temperature is ${kelvinToCelsiusMinTemp}° celsius`
                 }
             }
         }
